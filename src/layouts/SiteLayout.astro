@@ -1,0 +1,22 @@
+---
+import '~/assets/styles/tailwind.css';
+import Intersect from '~/components/common/Intersect.astro';
+interface Props { title?: string; description?: string; noindex?: boolean; }
+const { title = 'Launchpad — Make room for your next big idea', description = 'A thoughtful workspace for your ideas, with secure sign-in, personal welcomes, and AI assistance. Built on AstroWind and Cloudflare.', noindex = false } = Astro.props;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} /><meta property="og:description" content={description} /><meta property="og:type" content="website" />
+    {noindex && <meta name="robots" content="noindex,nofollow" />}
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <title>{title}</title>
+    <script is:inline>
+      try { const preference = localStorage.getItem('theme'); document.documentElement.classList.toggle('dark', preference === 'dark' || (!preference && matchMedia('(prefers-color-scheme: dark)').matches)); } catch {}
+    </script>
+  </head>
+  <body><a class="skip-link" href="#main-content">Skip to content</a><slot /><Intersect /></body>
+</html>

@@ -1,0 +1,66 @@
+---
+import SiteLayout from '~/layouts/SiteLayout.astro';
+import SiteHeader from '~/components/widgets/SiteHeader.astro';
+import Brand from '~/components/common/Brand.astro';
+import HeroText from '~/components/widgets/HeroText.astro';
+import Features2 from '~/components/widgets/Features2.astro';
+import FAQs from '~/components/widgets/FAQs.astro';
+import CallToAction from '~/components/widgets/CallToAction.astro';
+import WorkspacePreview from '~/components/widgets/WorkspacePreview.astro';
+import { Icon } from 'astro-icon/components';
+const features = [
+  { title: 'An easy way in.', description: 'Sign in with Google or GitHub, and step straight into your own workspace.', icon: 'tabler:shield-check' },
+  { title: 'A more personal hello.', description: 'Start every new account with a thoughtful welcome, delivered right to your inbox.', icon: 'tabler:mail-heart' },
+  { title: 'A spark when you need it.', description: 'Find a fresh angle, explore an idea, or get a little help with that first draft.', icon: 'tabler:sparkles' },
+  { title: 'Space for your stories.', description: 'Bring your thoughts together. Create, save, and return to the posts that matter to you.', icon: 'tabler:notes' },
+  { title: 'Thoughtful by design.', description: 'A calm interface, considered interactions, and a comfortable experience on every screen.', icon: 'tabler:layout' },
+  { title: 'Room to make it yours.', description: 'A flexible foundation you can shape around the product, community, or idea you have in mind.', icon: 'tabler:plant-2' },
+];
+const questions = [
+  { title: 'How do I create an account?', description: 'Choose Google or GitHub on the sign-in page. Your first sign-in creates your account and opens your personal workspace.' },
+  { title: 'What can I do in my workspace?', description: 'Create and save posts, use the AI assistant to explore ideas, and view your profile. Your content is linked to your own account.' },
+  { title: 'How does the AI assistant work?', description: 'Write a question or describe an idea. The assistant returns a response you can build on. Requests have a short usage allowance to keep the workspace fair.' },
+  { title: 'Can I use this as a starting point for my own product?', description: 'Yes. Launchpad is a reusable starter combining AstroWind’s public-facing components with an interactive workspace. The code and setup guide are ready for your own branding and integrations.' },
+];
+---
+<SiteLayout>
+  <SiteHeader />
+  <main id="main-content">
+    <div id="landing-hero">
+      <HeroText badge="A fresh start for your next big idea" title='Big ideas deserve<br /><span class="hero-accent">a better beginning.</span>' subtitle="Meet your starting point for something great. A thoughtful workspace with a little inspiration built in, ready to become whatever you imagine." callToAction={{ text: 'Open your workspace', href: '/login', icon: 'tabler:arrow-up-right' }} callToAction2={{ text: 'Take a look around', href: '#features' }} />
+      <WorkspacePreview />
+    </div>
+    <div class="foundation-strip"><span>A THOUGHTFUL FOUNDATION, POWERED BY</span><div><span><Icon name="tabler:brand-astro" /> Astro</span><span><Icon name="tabler:brand-cloudflare" /> Cloudflare</span><span><Icon name="tabler:brand-openai" /> OpenAI</span><span><Icon name="tabler:mail" /> Resend</span></div></div>
+    <Features2 id="features" tagline="THE GOOD STUFF, ALREADY HERE" title="Less friction.<br />More forward motion." subtitle="The essentials come together, so you can spend more time on the thing you actually want to make." items={features} columns={3} classes={{ container: 'max-w-6xl', headline: { subtitle: 'text-base max-w-xl mx-auto' } }} />
+    <section id="how-it-works" class="steps-section">
+      <div class="steps-intro"><span class="section-eyebrow">FROM A LITTLE IDEA TO WHAT’S NEXT</span><h2>A simple start.<br />An open-ended future.</h2><p>Take that first step. The rest is yours to shape.</p><a href="/login">Let's get started <Icon name="tabler:arrow-up-right" /></a></div>
+      <div class="steps-list">{[
+        ['01', 'Make yourself at home.', 'Sign in with an account you already use. Your workspace is ready when you are.'],
+        ['02', 'Find your first spark.', 'Ask a question, explore an idea, or turn a blank page into a starting point.'],
+        ['03', 'Make it something yours.', 'Save your work, come back to it, and keep building on what matters.'],
+      ].map(([number, title, description]) => <div class="step"><span>{number}</span><div><h3>{title}</h3><p>{description}</p></div></div>)}</div>
+    </section>
+    <FAQs id="faq" tagline="A FEW THINGS YOU MIGHT BE WONDERING" title="Good questions.<br />Straightforward answers." items={questions} defaultOpen={-1} classes={{ container: 'max-w-6xl' }} />
+    <CallToAction id="start" title="Your next chapter starts here." subtitle="Bring a little curiosity. Leave with a little momentum." actions={[{ variant: 'primary', text: 'Open your workspace', href: '/login', icon: 'tabler:arrow-up-right' }]} classes={{ headline: { subtitle: 'text-base text-muted-foreground' } }} />
+  </main>
+  <footer class="site-footer"><div class="footer-inner"><div><Brand /><p class="mt-3">A little less setup. A lot more possibility.</p></div><nav aria-label="Footer navigation"><a href="/#features">Features</a><a href="/#faq">FAQs</a><a href="/login">Your workspace</a></nav><p>Built with AstroWind. Made for what’s next.</p></div></footer>
+</SiteLayout>
+<style>
+.foundation-strip { max-width: 950px; margin: 52px auto 12px; padding: 0 24px; text-align: center; }
+.foundation-strip > span { font-size: 9px; letter-spacing: .13em; color: var(--muted-foreground); }
+.foundation-strip > div { display: flex; justify-content: center; flex-wrap: wrap; gap: 48px; margin-top: 22px; color: var(--muted-foreground); }
+.foundation-strip > div > span { display: flex; align-items: center; gap: 8px; font-size: 19px; font-weight: 600; letter-spacing: -.04em; }
+.foundation-strip svg { width: 25px; height: 25px; }
+.steps-section { max-width: 1130px; margin: 20px auto 40px; padding: 52px 60px; display: grid; grid-template-columns: 1fr 1fr; gap: 64px; background: var(--aw-color-accent); border-radius: 24px; }
+.section-eyebrow { font-size: 9px; letter-spacing: .13em; color: var(--aw-color-primary); font-weight: 600; }
+.steps-intro h2 { margin-top: 22px; font-size: 39px; line-height: 1.18; letter-spacing: -.05em; font-weight: 550; }
+.steps-intro p { font-size: 14px; color: var(--muted-foreground); margin-top: 20px; line-height: 1.8; }
+.steps-intro a { font-size: 13px; font-weight: 600; color: var(--aw-color-primary); display: inline-flex; align-items: center; gap: 8px; margin-top: 24px; }
+.steps-intro a svg { width: 16px; height: 16px; }
+.steps-list { display: grid; gap: 30px; }
+.step { display: flex; gap: 20px; }
+.step > span { font-size: 11px; background: var(--card); color: var(--aw-color-primary); border-radius: 50%; width: 35px; height: 35px; flex-shrink: 0; display: grid; place-items: center; }
+.step h3 { font-size: 17px; font-weight: 600; letter-spacing: -.025em; margin: 4px 0 8px; }
+.step p { color: var(--muted-foreground); font-size: 13px; line-height: 1.8; }
+@media (max-width: 760px) { .foundation-strip { margin-top: 40px; } .foundation-strip > div { gap: 22px; } .foundation-strip > div > span { font-size: 16px; } .foundation-strip svg { width: 20px; height: 20px; } .steps-section { margin: 10px 16px 20px; padding: 32px 24px; grid-template-columns: 1fr; gap: 36px; } .steps-intro h2 { font-size: 32px; } }
+</style>

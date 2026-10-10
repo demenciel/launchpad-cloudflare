@@ -1,3 +1,4 @@
+import { Reveal } from "@client/components/animated";
 import { Button } from "@client/components/ui/button";
 import {
 	Card,
@@ -14,15 +15,14 @@ import {
 	DialogTitle,
 } from "@client/components/ui/dialog";
 import { Skeleton } from "@client/components/ui/skeleton";
-import { useSession } from "@client/lib/auth-client";
 import { api } from "@client/lib/api";
+import { useSession } from "@client/lib/auth-client";
 import { useQuery } from "@tanstack/react-query";
 import { Link, createFileRoute } from "@tanstack/react-router";
-import { GithubIcon } from "lucide-react";
 import { useState } from "react";
 
-export const Route = createFileRoute("/")({
-	component: Index,
+export const Route = createFileRoute("/_authenticated/dashboard")({
+	component: Dashboard,
 });
 
 async function getPosts() {
@@ -43,7 +43,7 @@ interface Post {
 	updatedAt: string;
 }
 
-function Index() {
+function Dashboard() {
 	const { data: session, isPending: sessionPending } = useSession();
 	const [selectedPost, setSelectedPost] = useState<Post | null>(null);
 	const [isModalOpen, setIsModalOpen] = useState(false);
@@ -91,70 +91,8 @@ function Index() {
 		);
 	}
 
-	// Show login prompt for unauthenticated users
 	if (!session) {
-		return (
-			<div className="container mx-auto px-4 py-12 text-center">
-				<h1 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground">
-					Cloudflare AI SAAS Stack Demo
-				</h1>
-				<p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
-					Full Stack boilerplate with Hono, Vite, and React, all running on
-					Cloudflare Workers. Modern, fast, and scalable.
-				</p>
-
-				<div className="mt-10">
-					<h3 className="text-2xl font-semibold text-foreground">
-						Key Features
-					</h3>
-					<div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-4xl mx-auto">
-						{[
-							{ icon: "⚡️", text: "Vite + React for the frontend" },
-							{ icon: "🛡️", text: "Type-safe API with Hono, Hono RPC and Zod" },
-							{ icon: "🔐", text: "Authentication with Better Auth" },
-							{ icon: "✨", text: "Tanstack Router, Query and Form" },
-							{ icon: "🗃️", text: "Database - Drizzle + Cloudflare D1" },
-							{ icon: "🤖", text: "AI integration with Vercel AI SDK" },
-						].map((feature) => (
-							<div
-								key={feature.text}
-								className="p-4 bg-card border rounded-lg flex flex-col items-center"
-							>
-								<span className="text-3xl">{feature.icon}</span>
-								<p className="mt-2 text-sm font-medium text-card-foreground">
-									{feature.text}
-								</p>
-							</div>
-						))}
-					</div>
-				</div>
-
-				<div className="mt-12 space-y-4">
-					<p className="text-muted-foreground">Ready to explore?</p>
-					<div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-						<Button size="lg" asChild className="w-full sm:w-auto">
-							<a
-								href="https://github.com/vijaynandwani/cloudflare-ai-saas-stack"
-								target="_blank"
-								rel="noopener noreferrer"
-								className="flex items-center justify-center"
-							>
-								<GithubIcon className="mr-2 h-5 w-5" />
-								GitHub
-							</a>
-						</Button>
-						<Button
-							size="lg"
-							variant="outline"
-							asChild
-							className="w-full sm:w-auto"
-						>
-							<Link to="/login">Log In</Link>
-						</Button>
-					</div>
-				</div>
-			</div>
-		);
+		return null;
 	}
 
 	// Handle API errors
@@ -183,13 +121,15 @@ function Index() {
 
 	// Show user's posts
 	return (
-		<div className="max-w-3xl mx-auto w-full">
+		<Reveal className="max-w-4xl mx-auto w-full">
 			<Card>
 				<CardHeader>
-					<CardTitle className="text-2xl">Your Posts</CardTitle>
+					<CardTitle className="text-3xl">
+						<h1>Your workspace</h1>
+					</CardTitle>
 					<CardDescription>
-						Welcome back, {session.user.name || session.user.email}! Here are
-						your posts.
+						Welcome back, {session.user.name || session.user.email}! Make room
+						for your next great idea.
 					</CardDescription>
 				</CardHeader>
 				<CardContent>
@@ -249,10 +189,10 @@ function Index() {
 									</svg>
 
 									<p className="text-muted-foreground mb-4 text-lg">
-										No posts found.
+										Your next story starts here.
 									</p>
 									<Button asChild size="lg">
-										<Link to="/create-post">Create Your First Post</Link>
+										<Link to="/create-post">Write your first post</Link>
 									</Button>
 								</div>
 							)}
@@ -295,8 +235,8 @@ function Index() {
 					</div>
 				</DialogContent>
 			</Dialog>
-		</div>
+		</Reveal>
 	);
 }
 
-export default Index;
+export default Dashboard;

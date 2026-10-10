@@ -19,7 +19,7 @@ const apiRoutes = app
 	.route("/ai", aiRoute)
 	.route("/auth-demo", authDemoRoute)
 	.all("/auth/*", (c) => {
-		const authHandler = auth(c.env).handler;
+		const authHandler = auth(c.env, c.executionCtx).handler;
 		return authHandler(c.req.raw);
 	});
 

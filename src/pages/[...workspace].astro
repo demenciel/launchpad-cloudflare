@@ -1,0 +1,11 @@
+---
+import SiteLayout from '~/layouts/SiteLayout.astro';
+import App from '~/client/main';
+export function getStaticPaths() {
+  return ['dashboard', 'login', 'register', 'ai', 'profile', 'create-post'].map((workspace) => ({ params: { workspace } }));
+}
+---
+<SiteLayout title="Your workspace — Launchpad" noindex>
+  <App client:only="react"><div slot="fallback" id="main-content" class="min-h-screen flex items-center justify-center text-muted-foreground" role="status">Opening your workspace…</div></App>
+  <noscript><p class="p-8 text-center">Enable JavaScript to sign in and use your workspace. <a href="/" class="underline">Return home</a>.</p></noscript>
+</SiteLayout>

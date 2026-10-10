@@ -1,9 +1,13 @@
 import { db } from "@worker/db";
 import { account, session, user, verification } from "@worker/db/schema";
+import { scheduleWelcomeEmail } from "@worker/email";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 
-export const auth = (env: Env) => {
+export const auth = (
+	env: Env,
+	executionContext?: Pick<ExecutionContext, "waitUntil">,
+) => {
 	return betterAuth({
 		database: drizzleAdapter(db(env), {
 			provider: "sqlite",
@@ -14,7 +18,8 @@ export const auth = (env: Env) => {
 				verification,
 			},
 		}),
-		baseUrl: env.BETTER_AUTH_URL,
+		baseURL: env.BETTER_AUTH_URL,
+		secret: env.BETTER_AUTH_SECRET,
 		trustedOrigins: [env.BETTER_AUTH_URL],
 		session: {
 			expiresIn: 60 * 60 * 24 * 7, // 7 days
@@ -25,9 +30,8 @@ export const auth = (env: Env) => {
 			},
 		},
 		advanced: {
-			cookieDomain: new URL(env.BETTER_AUTH_URL).hostname,
 			useSecureCookies: env.ENVIRONMENT === "production",
-			sameSite: "lax",
+			defaultCookieAttributes: { sameSite: "lax" },
 		},
 		emailAndPassword: {
 			enabled: false,
@@ -36,6 +40,19 @@ export const auth = (env: Env) => {
 			google: {
 				clientId: env.GOOGLE_CLIENT_ID,
 				clientSecret: env.GOOGLE_CLIENT_SECRET,
+			},
+			github: {
+				clientId: env.GITHUB_CLIENT_ID,
+				clientSecret: env.GITHUB_CLIENT_SECRET,
+			},
+		},
+		databaseHooks: {
+			user: {
+				create: {
+					after: async (user) => {
+						await scheduleWelcomeEmail(env, user, executionContext);
+					},
+				},
 			},
 		},
 	});

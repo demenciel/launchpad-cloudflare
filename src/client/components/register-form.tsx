@@ -40,7 +40,7 @@ export function RegisterForm({
 					}
 
 					// Success! Handle the redirect here
-					navigate({ to: "/" });
+					navigate({ to: "/dashboard" });
 
 					return undefined; // No errors
 				} catch (_error) {

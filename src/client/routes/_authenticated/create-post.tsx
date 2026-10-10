@@ -43,7 +43,7 @@ function CreatePost() {
 					}
 
 					toast.success("Post created successfully!");
-					navigate({ to: "/" });
+					navigate({ to: "/dashboard" });
 					return null; // Important: return null for success
 				} catch (_error) {
 					return {

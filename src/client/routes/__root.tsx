@@ -6,147 +6,124 @@ import {
 	createRootRoute,
 	useRouter,
 } from "@tanstack/react-router";
-import { MoonIcon, SunIcon } from "lucide-react";
+import { ArrowUpRight, MoonIcon, SunIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Toaster, toast } from "sonner";
 
-export const Route = createRootRoute({
-	component: Root,
-});
+export const Route = createRootRoute({ component: Root });
 
 function ThemeToggle() {
-	const [theme, setTheme] = useState(() => {
-		if (typeof localStorage !== "undefined") {
-			const storedTheme = localStorage.getItem("theme");
-			if (storedTheme === "light" || storedTheme === "dark") {
-				return storedTheme;
-			}
-		}
-		// If no theme in localStorage, check system preference.
-		// If system prefers light, use light. Otherwise, default to dark.
-		if (window.matchMedia("(prefers-color-scheme: light)").matches) {
-			return "light";
-		}
-		return "dark"; // Default to dark
-	});
-
-	useEffect(() => {
-		const root = window.document.documentElement;
-		if (theme === "dark") {
-			root.classList.add("dark");
-		} else {
-			root.classList.remove("dark");
-		}
-		localStorage.setItem("theme", theme);
-	}, [theme]);
-
-	const toggleTheme = () => {
-		setTheme(theme === "light" ? "dark" : "light");
-	};
-
+	const [theme, setTheme] = useState(() =>
+		document.documentElement.classList.contains("dark") ? "dark" : "light",
+	);
+	function toggleTheme() {
+		const next = theme === "dark" ? "light" : "dark";
+		setTheme(next);
+		document.documentElement.classList.toggle("dark", next === "dark");
+		try {
+			localStorage.setItem("theme", next);
+		} catch {}
+		document.dispatchEvent(new Event("aw:theme-change"));
+	}
 	return (
-		<Button variant="ghost" size="icon" onClick={toggleTheme}>
-			{theme === "light" ? (
-				<MoonIcon className="h-5 w-5" />
+		<Button
+			variant="ghost"
+			size="icon"
+			onClick={toggleTheme}
+			aria-label="Toggle color theme"
+			aria-pressed={theme === "dark"}
+		>
+			{theme === "dark" ? (
+				<SunIcon aria-hidden="true" />
 			) : (
-				<SunIcon className="h-5 w-5" />
+				<MoonIcon aria-hidden="true" />
 			)}
-			<span className="sr-only">Toggle theme</span>
 		</Button>
 	);
 }
 
 function NavBar() {
-	const { data: sessionData, isPending } = useSession();
-	const user = sessionData?.user;
-	const router = useRouter();
-
-	const handleLogout = async () => {
+	const { data: session, isPending } = useSession();
+	const [loggingOut, setLoggingOut] = useState(false);
+	async function logout() {
+		setLoggingOut(true);
 		try {
-			await authClient.signOut({
-				fetchOptions: {
-					onSuccess: () => {
-						router.navigate({ to: "/" });
-					},
-				},
-			});
-		} catch (error: unknown) {
-			console.error("Logout failed or error during signOut call:", error);
-			// Navigate to home on logout attempt
-			if (router.state.location.pathname !== "/") {
-				router.navigate({ to: "/" });
+			const result = await authClient.signOut();
+			if (result.error) {
+				throw new Error("Unable to sign out. Please try again.");
 			}
+			window.location.assign("/");
+		} catch {
+			toast.error("Unable to sign out. Please try again.");
+			setLoggingOut(false);
 		}
-	};
-
+	}
 	return (
-		<nav className="px-4 py-3 flex items-center justify-between border-b">
-			<div className="flex items-center gap-4">
-				<Link
-					to="/"
-					className="text-lg font-medium text-foreground/80 hover:text-foreground [&.active]:text-primary [&.active]:font-semibold"
-				>
-					MyApp
-				</Link>{" "}
-				{!isPending && sessionData && user ? (
-					<>
-						<Link
-							to="/profile"
-							className="text-sm text-muted-foreground hover:text-foreground [&.active]:text-primary"
+		<header className="site-header">
+			<nav className="workspace-nav" aria-label="Workspace navigation">
+				<a href="/" className="brand" aria-label="Launchpad home">
+					<span className="brand-mark" aria-hidden="true">
+						<svg
+							width="20"
+							height="20"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							strokeWidth="2"
 						>
-							Profile
-						</Link>
-						<Link
-							to="/create-post"
-							className="text-sm text-muted-foreground hover:text-foreground [&.active]:text-primary"
-						>
-							Create Post
-						</Link>
-					</>
-				) : null}
-			</div>
-			<div className="flex items-center gap-2">
-				{!isPending && sessionData && user ? (
-					<div className="flex items-center gap-3">
-						<span className="text-sm text-muted-foreground">
-							Hello, {user.name || user.email}
-						</span>
-						<Button variant="outline" size="sm" onClick={handleLogout}>
-							Logout
-						</Button>
+							<title>Launchpad</title>
+							<path d="m5 17 7-12 7 12M8 12h8M4 20h16" />
+						</svg>
+					</span>
+					Launchpad
+				</a>
+				{!isPending && session && (
+					<div className="workspace-tabs">
+						<Link to="/dashboard">Overview</Link>
+						<Link to="/create-post">Create a post</Link>
+						<Link to="/ai">AI assistant</Link>
+						<Link to="/profile">Profile</Link>
 					</div>
-				) : (
-					<Link to="/login">
-						<Button variant="outline" size="sm">
-							Login
-						</Button>
-					</Link>
 				)}
-				<ThemeToggle />
-			</div>
-		</nav>
+				<div className="flex items-center gap-2">
+					<ThemeToggle />
+					{session ? (
+						<Button
+							variant="outline"
+							size="sm"
+							onClick={logout}
+							disabled={loggingOut}
+						>
+							{loggingOut ? "Signing out…" : "Sign out"}
+						</Button>
+					) : (
+						<a
+							href="/"
+							className="text-xs text-muted-foreground flex gap-1 items-center"
+						>
+							Back to home{" "}
+							<ArrowUpRight className="w-3 h-3" aria-hidden="true" />
+						</a>
+					)}
+				</div>
+			</nav>
+		</header>
 	);
 }
 
 function Root() {
 	const router = useRouter();
-
 	useEffect(() => {
-		const params = new URLSearchParams(window.location.search);
-		const error = params.get("error");
-
+		const error = new URLSearchParams(window.location.search).get("error");
 		if (error) {
-			toast.error(`Authentication failed: ${error}`);
-
-			// Clean up URL
-			router.navigate({ to: "/", replace: true });
+			toast.error("Sign-in didn't finish. Please try again.");
+			router.navigate({ to: "/login", replace: true });
 		}
 	}, [router]);
-
 	return (
-		<div className="min-h-screen flex flex-col">
+		<div className="workspace">
 			<NavBar />
-			<main className="flex-grow p-4 md:p-6">
+			<main id="main-content" className="workspace-main">
 				<Outlet />
 			</main>
 			<Toaster position="top-right" />

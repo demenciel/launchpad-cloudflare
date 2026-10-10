@@ -1,0 +1,93 @@
+---
+import { Icon } from 'astro-icon/components';
+---
+<div class="preview-wrap">
+  <div class="preview-window" role="img" aria-label="Illustrative Launchpad workspace preview: saved ideas, a writing assistant, and a recent welcome email. Example content.">
+    <div class="window-bar"><div class="window-dots"><i></i><i></i><i></i></div><span><Icon name="tabler:lock" /> launchpad / workspace</span><span class="preview-label">WORKSPACE PREVIEW</span></div>
+    <div class="window-body">
+      <aside class="preview-sidebar" aria-hidden="true">
+        <div class="preview-logo"><Icon name="tabler:triangle" /> Launchpad</div>
+        <div class="sidebar-heading">WORKSPACE</div>
+        <div class="sidebar-active"><Icon name="tabler:layout-dashboard" /> Overview</div>
+        <div><Icon name="tabler:notes" /> Your posts</div>
+        <div><Icon name="tabler:sparkles" /> AI assistant</div>
+        <div><Icon name="tabler:user-circle" /> Profile</div>
+        <div class="sidebar-bottom"><span class="avatar">Y</span><div>Your workspace<small>A fresh start</small></div></div>
+      </aside>
+      <div class="preview-main" aria-hidden="true">
+        <div class="preview-greeting"><div><span class="eyebrow">A LITTLE SPACE TO CREATE</span><h2>Good ideas start here.</h2><p>Pick up a thought. Take it somewhere new.</p></div><span class="preview-new"><Icon name="tabler:plus" /> New post</span></div>
+        <div class="preview-cards">
+          <div class="idea-card"><span class="card-icon"><Icon name="tabler:bulb" /></span><small>YOUR NEXT CHAPTER</small><h3>A tiny idea.<br />A world of possibility.</h3><p>Keep your thoughts, drafts, and next steps in one place.</p><div class="idea-lines"><i></i><i></i><i></i></div><span class="card-footer">Make something yours <Icon name="tabler:arrow-up-right" /></span></div>
+          <div class="assistant-card"><div class="assistant-title"><Icon name="tabler:sparkles" /> A little inspiration<span>AI</span></div><p class="prompt-preview">Help me find a fresh angle for my next project…</p><div class="response-preview"><span class="response-icon"><Icon name="tabler:sparkles" /></span><div><strong>Start with the thing you care about.</strong><p>What small, everyday problem could you make a little easier?</p><div class="response-lines"><i></i><i></i></div></div></div><div class="assistant-footer"><span>Turn a thought into a first draft</span><Icon name="tabler:arrow-right" /></div></div>
+        </div>
+        <div class="welcome-preview"><span class="mail-icon"><Icon name="tabler:mail-check" /></span><div><strong>A warm welcome, from day one.</strong><p>A personal hello lands in your inbox when you join.</p></div><span class="welcome-check"><Icon name="tabler:check" /></span></div>
+      </div>
+    </div>
+  </div>
+  <div class="preview-note"><span></span> Your ideas. Your space. Your next beginning.</div>
+</div>
+<style>
+.preview-wrap { max-width: 1090px; margin: 34px auto 0; padding: 0 24px; }
+.preview-window { border: 1px solid var(--border); border-radius: 18px; background: var(--card); box-shadow: 0 24px 80px -20px #215b3920, 0 2px 5px #215b3908; overflow: hidden; }
+.window-bar { height: 46px; background: var(--muted); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; padding: 0 20px; font-size: 10px; color: var(--muted-foreground); }
+.window-bar > span { display: flex; align-items: center; gap: 6px; }
+.window-bar svg { width: 11px; height: 11px; }
+.window-dots { display: flex; gap: 5px; }
+.window-dots i { width: 7px; height: 7px; border-radius: 50%; background: color-mix(in srgb, var(--foreground) 22%, var(--background)); }
+.preview-label { font-size: 8px; letter-spacing: .1em; }
+.window-body { display: flex; }
+.preview-sidebar { width: 180px; flex-shrink: 0; padding: 28px 14px 18px; border-right: 1px solid var(--border); position: relative; font-size: 11px; }
+.preview-sidebar > div:not(.sidebar-heading) { display: flex; align-items: center; gap: 10px; padding: 9px 12px; }
+.preview-sidebar svg { width: 15px; height: 15px; }
+.preview-sidebar .preview-logo { font-weight: 650; font-size: 15px; padding-bottom: 24px !important; letter-spacing: -.04em; }
+.preview-logo svg { color: var(--aw-color-primary); }
+.sidebar-heading { font-size: 8px; letter-spacing: .12em; color: var(--muted-foreground); padding: 12px 12px 8px; }
+.sidebar-active { border-radius: 8px; color: var(--aw-color-primary); background: var(--aw-color-accent); font-weight: 600; }
+.sidebar-bottom { position: absolute; bottom: 14px; left: 14px; font-size: 10px; }
+.sidebar-bottom small { display: block; color: var(--muted-foreground); font-size: 9px; margin-top: 4px; }
+.avatar { height: 27px; width: 27px; border-radius: 50%; background: var(--aw-color-accent); color: var(--aw-color-primary); display: grid; place-items: center; }
+.preview-main { padding: 28px; flex: 1; min-width: 0; }
+.preview-greeting { display: flex; justify-content: space-between; gap: 16px; align-items: center; margin-bottom: 26px; }
+.eyebrow { color: var(--muted-foreground); font-size: 8px; letter-spacing: .12em; }
+.preview-greeting h2 { font-size: 25px; font-weight: 600; letter-spacing: -.055em; margin-top: 7px; }
+.preview-greeting p { font-size: 10px; color: var(--muted-foreground); margin-top: 6px; }
+.preview-new { display: flex; align-items: center; gap: 5px; color: var(--primary-foreground); background: var(--aw-color-primary); border-radius: 7px; font-size: 10px; padding: 10px 13px; white-space: nowrap; }
+.preview-new svg { width: 12px; height: 12px; }
+.preview-cards { display: grid; grid-template-columns: 1fr 1.2fr; gap: 18px; }
+.idea-card { background: var(--aw-color-accent); padding: 21px; border-radius: 12px; }
+.card-icon { display: grid; place-items: center; height: 32px; width: 32px; border-radius: 8px; background: var(--card); color: var(--aw-color-primary); }
+.card-icon svg { width: 18px; height: 18px; }
+.idea-card > small { display: block; font-size: 7px; letter-spacing: .14em; margin: 18px 0 8px; color: var(--muted-foreground); }
+.idea-card h3 { font-size: 21px; font-weight: 550; letter-spacing: -.05em; line-height: 1.2; }
+.idea-card p { font-size: 10px; line-height: 1.8; color: var(--muted-foreground); margin-top: 10px; }
+.idea-lines { display: flex; gap: 5px; margin: 20px 0; }
+.idea-lines i { height: 3px; flex: 1; background: color-mix(in srgb, var(--aw-color-primary) 20%, transparent); border-radius: 3px; }
+.card-footer { font-size: 9px; display: flex; justify-content: space-between; align-items: center; }
+.card-footer svg { width: 13px; height: 13px; }
+.assistant-card { border: 1px solid var(--border); border-radius: 12px; padding: 19px; }
+.assistant-title { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; }
+.assistant-title > svg { color: var(--aw-color-primary); width: 15px; height: 15px; }
+.assistant-title > span { margin-left: auto; font-size: 7px; border: 1px solid var(--border); border-radius: 4px; padding: 2px 4px; color: var(--muted-foreground); }
+.prompt-preview { margin: 17px 0; background: var(--muted); border-radius: 8px; padding: 12px; font-size: 10px; line-height: 1.7; color: var(--muted-foreground); }
+.response-preview { display: flex; gap: 10px; font-size: 10px; }
+.response-icon { color: var(--aw-color-primary); flex-shrink: 0; }
+.response-icon svg { width: 14px; height: 14px; }
+.response-preview strong { font-weight: 550; line-height: 1.6; }
+.response-preview p { color: var(--muted-foreground); line-height: 1.7; margin-top: 6px; }
+.response-lines { margin-top: 13px; display: grid; gap: 6px; }
+.response-lines i { height: 4px; width: 90%; background: var(--muted); border-radius: 4px; }
+.response-lines i:last-child { width: 60%; }
+.assistant-footer { display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--border); margin-top: 19px; padding-top: 12px; font-size: 8px; color: var(--muted-foreground); }
+.assistant-footer svg { width: 12px; height: 12px; }
+.welcome-preview { margin-top: 18px; border: 1px solid var(--border); border-radius: 10px; padding: 14px; display: flex; gap: 12px; align-items: center; }
+.mail-icon { color: var(--aw-color-primary); background: var(--aw-color-accent); padding: 8px; border-radius: 8px; }
+.mail-icon svg { width: 17px; height: 17px; }
+.welcome-preview strong { font-size: 10px; font-weight: 550; }
+.welcome-preview p { font-size: 9px; margin-top: 3px; color: var(--muted-foreground); }
+.welcome-check { margin-left: auto; color: var(--aw-color-primary); }
+.welcome-check svg { width: 15px; height: 15px; }
+.preview-note { display: flex; justify-content: center; align-items: center; gap: 7px; font-size: 11px; color: var(--muted-foreground); margin: 20px 0; }
+.preview-note > span { width: 5px; height: 5px; background: var(--aw-color-primary); border-radius: 50%; }
+@media (max-width: 760px) { .preview-sidebar { display: none; } .preview-main { padding: 18px; } .preview-greeting h2 { font-size: 21px; } .preview-cards { gap: 12px; } .preview-new { display: none; } .idea-card { padding: 15px; } .assistant-card { padding: 15px; } .idea-card h3 { font-size: 18px; } .window-bar { padding: 0 14px; } }
+@media (max-width: 460px) { .preview-cards { grid-template-columns: 1fr; } .idea-card { display: none; } .preview-label { display: none !important; } .welcome-preview p { line-height: 1.5; } .preview-wrap { padding: 0 16px; } }
+</style>

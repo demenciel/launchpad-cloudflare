@@ -12,10 +12,10 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
-import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
+import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedCreatePostRouteImport } from './routes/_authenticated/create-post'
-import { Route as ApiAuthCallbackProviderRouteImport } from './routes/api/auth/callback/$provider'
+import { Route as AuthenticatedAiRouteImport } from './routes/_authenticated/ai'
 
 const RegisterRoute = RegisterRouteImport.update({
   id: '/register',
@@ -31,14 +31,14 @@ const AuthenticatedRoute = AuthenticatedRouteImport.update({
   id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AuthenticatedProfileRoute = AuthenticatedProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
 const AuthenticatedCreatePostRoute = AuthenticatedCreatePostRouteImport.update({
@@ -46,87 +46,78 @@ const AuthenticatedCreatePostRoute = AuthenticatedCreatePostRouteImport.update({
   path: '/create-post',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
-const ApiAuthCallbackProviderRoute = ApiAuthCallbackProviderRouteImport.update({
-  id: '/api/auth/callback/$provider',
-  path: '/api/auth/callback/$provider',
-  getParentRoute: () => rootRouteImport,
+const AuthenticatedAiRoute = AuthenticatedAiRouteImport.update({
+  id: '/ai',
+  path: '/ai',
+  getParentRoute: () => AuthenticatedRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
   '': typeof AuthenticatedRouteWithChildren
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/ai': typeof AuthenticatedAiRoute
   '/create-post': typeof AuthenticatedCreatePostRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
   '/profile': typeof AuthenticatedProfileRoute
-  '/api/auth/callback/$provider': typeof ApiAuthCallbackProviderRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
   '': typeof AuthenticatedRouteWithChildren
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/ai': typeof AuthenticatedAiRoute
   '/create-post': typeof AuthenticatedCreatePostRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
   '/profile': typeof AuthenticatedProfileRoute
-  '/api/auth/callback/$provider': typeof ApiAuthCallbackProviderRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/_authenticated/ai': typeof AuthenticatedAiRoute
   '/_authenticated/create-post': typeof AuthenticatedCreatePostRoute
+  '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
-  '/api/auth/callback/$provider': typeof ApiAuthCallbackProviderRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/'
     | ''
     | '/login'
     | '/register'
+    | '/ai'
     | '/create-post'
+    | '/dashboard'
     | '/profile'
-    | '/api/auth/callback/$provider'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/'
     | ''
     | '/login'
     | '/register'
+    | '/ai'
     | '/create-post'
+    | '/dashboard'
     | '/profile'
-    | '/api/auth/callback/$provider'
   id:
     | '__root__'
-    | '/'
     | '/_authenticated'
     | '/login'
     | '/register'
+    | '/_authenticated/ai'
     | '/_authenticated/create-post'
+    | '/_authenticated/dashboard'
     | '/_authenticated/profile'
-    | '/api/auth/callback/$provider'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   LoginRoute: typeof LoginRoute
   RegisterRoute: typeof RegisterRoute
-  ApiAuthCallbackProviderRoute: typeof ApiAuthCallbackProviderRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/_authenticated': {
       id: '/_authenticated'
       path: ''
@@ -148,11 +139,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RegisterRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/ai': {
+      id: '/_authenticated/ai'
+      path: '/ai'
+      fullPath: '/ai'
+      preLoaderRoute: typeof AuthenticatedAiRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/create-post': {
       id: '/_authenticated/create-post'
       path: '/create-post'
       fullPath: '/create-post'
       preLoaderRoute: typeof AuthenticatedCreatePostRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/dashboard': {
+      id: '/_authenticated/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/profile': {
@@ -162,23 +167,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedProfileRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
-    '/api/auth/callback/$provider': {
-      id: '/api/auth/callback/$provider'
-      path: '/api/auth/callback/$provider'
-      fullPath: '/api/auth/callback/$provider'
-      preLoaderRoute: typeof ApiAuthCallbackProviderRouteImport
-      parentRoute: typeof rootRouteImport
-    }
   }
 }
 
 interface AuthenticatedRouteChildren {
+  AuthenticatedAiRoute: typeof AuthenticatedAiRoute
   AuthenticatedCreatePostRoute: typeof AuthenticatedCreatePostRoute
+  AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedAiRoute: AuthenticatedAiRoute,
   AuthenticatedCreatePostRoute: AuthenticatedCreatePostRoute,
+  AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
 }
 
@@ -187,11 +189,9 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
 )
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   LoginRoute: LoginRoute,
   RegisterRoute: RegisterRoute,
-  ApiAuthCallbackProviderRoute: ApiAuthCallbackProviderRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

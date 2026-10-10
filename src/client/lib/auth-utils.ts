@@ -11,6 +11,6 @@ export const redirectIfAuthenticated = async () => {
 	const session = result.data;
 
 	if (session?.user) {
-		throw redirect({ to: "/", replace: true });
+		throw redirect({ to: "/dashboard", replace: true });
 	}
 };
